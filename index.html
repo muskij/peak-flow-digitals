@@ -1,18 +1,20 @@
 <title>Peak Flow Digitals</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one centered axis. Every section mirrors left/right around it; a mirrored peak line is the single bold moment. */
+/* Layout: one centred axis. Sections mirror left and right around it, like a drawing sheet. The pointer-reactive peak line in the hero is the single bold moment. */
 :root {
-  --bg: #F2F3FA;
+  --bg: #F3F4FB;
   --bg-raise: #FFFFFF;
   --ink: #12142B;
   --ink-soft: #4A4E70;
-  --line: #D5D8EA;
+  --line: #D3D6EA;
+  --grid: rgba(52, 65, 214, 0.07);
   --accent: #3441D6;
   --accent-ink: #FFFFFF;
   --peak: #3441D6;
   --peak-faint: rgba(52, 65, 214, 0.22);
+  --wash: rgba(52, 65, 214, 0.08);
 
   --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
   --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -20,170 +22,177 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #090B1E;
-    --bg-raise: #10132D;
-    --ink: #E9EBFB;
-    --ink-soft: #9CA1C8;
-    --line: #232850;
-    --accent: #99A4FF;
-    --accent-ink: #090B1E;
-    --peak: #99A4FF;
-    --peak-faint: rgba(153, 164, 255, 0.2);
+    --bg: #080A1C; --bg-raise: #0F1230; --ink: #EAECFB; --ink-soft: #9AA0C9; --line: #232850;
+    --grid: rgba(153, 166, 255, 0.07); --accent: #9AA6FF; --accent-ink: #080A1C;
+    --peak: #9AA6FF; --peak-faint: rgba(154, 166, 255, 0.2); --wash: rgba(154, 166, 255, 0.09);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #090B1E;
-  --bg-raise: #10132D;
-  --ink: #E9EBFB;
-  --ink-soft: #9CA1C8;
-  --line: #232850;
-  --accent: #99A4FF;
-  --accent-ink: #090B1E;
-  --peak: #99A4FF;
-  --peak-faint: rgba(153, 164, 255, 0.2);
+  --bg: #080A1C; --bg-raise: #0F1230; --ink: #EAECFB; --ink-soft: #9AA0C9; --line: #232850;
+  --grid: rgba(153, 166, 255, 0.07); --accent: #9AA6FF; --accent-ink: #080A1C;
+  --peak: #9AA6FF; --peak-faint: rgba(154, 166, 255, 0.2); --wash: rgba(154, 166, 255, 0.09);
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
+html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6; overflow-x: hidden; }
 a { color: inherit; }
+button, textarea, input { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.wrap {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-section { padding-block: 88px; }
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 96px; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.15; text-wrap: balance; margin: 0; }
-h2 { font-size: clamp(26px, 4.4vw, 40px); }
+h2 { font-size: clamp(26px, 4.6vw, 44px); letter-spacing: -0.01em; }
 .center { text-align: center; }
-.lede { color: var(--ink-soft); max-width: 58ch; margin: 18px auto 0; }
+.lede { color: var(--ink-soft); max-width: 60ch; margin: 18px auto 0; }
+
+/* Section label with a rule either side, so the axis stays visible */
+.label { display: flex; align-items: center; gap: 16px; justify-content: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; }
+.label::before, .label::after { content: ""; height: 1px; width: min(90px, 18vw); background: var(--line); }
 
 /* Header */
-.top {
-  position: sticky;
-  top: env(safe-area-inset-top, 0px);
-  z-index: 20;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; gap: 12px; }
+.brand { font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 10px; justify-content: center; }
+.mark { width: 22px; height: 22px; display: block; }
+.nav { display: flex; gap: 22px; font-size: 14px; }
+.nav a { text-decoration: none; color: var(--ink-soft); }
+.nav a:hover { color: var(--ink); }
+.nav.l { justify-content: flex-start; }
+.nav.r { justify-content: flex-end; align-items: center; }
+.toggle { border: 1px solid var(--line); background: transparent; padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; color: var(--ink-soft); }
+.toggle:hover { color: var(--ink); border-color: var(--accent); }
+.nav .cta { color: var(--accent); font-weight: 600; }
+.strip { display: none; }
+@media (max-width: 760px) {
+  .bar { grid-template-columns: 1fr auto; }
+  .nav.l { display: none; }
+  .brand { justify-content: flex-start; }
+  .nav.r a:not(.cta) { display: none; }
+  .strip { display: flex; gap: 22px; overflow-x: auto; padding-bottom: 10px; font-size: 14px; scrollbar-width: none; }
+  .strip a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; }
 }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0 0 auto;
-  height: env(safe-area-inset-top, 0px);
-  z-index: 30;
-  background: var(--bg);
-}
-.top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; gap: 12px; }
-.brand { font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: 0.04em; text-decoration: none; text-align: center; white-space: nowrap; }
-.nav-l, .nav-r { display: flex; gap: 22px; font-size: 14px; }
-.nav-l { justify-content: flex-start; }
-.nav-r { justify-content: flex-end; }
-.nav-l a, .nav-r a { text-decoration: none; color: var(--ink-soft); }
-.nav-l a:hover, .nav-r a:hover { color: var(--ink); }
-@media (max-width: 720px) {
-  .top .wrap { grid-template-columns: 1fr auto; }
-  .nav-l { display: none; }
-  .nav-r a:not(.nav-cta) { display: none; }
-  .brand { text-align: left; }
-  .nav-r { grid-column: 2; }
-}
-.nav-cta { color: var(--accent) !important; font-weight: 600; }
 
 /* Hero */
-.hero { padding-block: 72px 24px; text-align: center; }
-.hero h1 { font-size: clamp(34px, 7.6vw, 76px); letter-spacing: -0.02em; margin-top: 22px; }
-.hero p { color: var(--ink-soft); max-width: 54ch; margin: 24px auto 0; font-size: clamp(17px, 2.2vw, 20px); }
+.hero { padding-block: 72px 0; text-align: center; position: relative; }
+.hero::before { content: ""; position: absolute; inset: 0 0 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 48px 48px; background-position: center top; -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); pointer-events: none; }
+.hero > * { position: relative; }
+.hero .tag { display: inline-flex; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--line); padding: 6px 14px; background: var(--bg); }
+.hero .tag i { width: 6px; height: 6px; background: var(--accent); display: block; }
+.hero h1 { font-size: clamp(31px, 8.4vw, 98px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; margin-top: 28px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { color: var(--ink-soft); max-width: 56ch; margin: 26px auto 0; font-size: clamp(17px, 2.2vw, 20px); }
 .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-.btn {
-  display: inline-block; padding: 13px 24px; border-radius: 2px; text-decoration: none;
-  font-weight: 600; font-size: 15px; border: 1px solid var(--accent);
-}
+.btn { display: inline-block; padding: 14px 26px; text-decoration: none; font-weight: 600; font-size: 15px; border: 1px solid var(--accent); cursor: pointer; background: transparent; }
 .btn-solid { background: var(--accent); color: var(--accent-ink); }
 .btn-ghost { color: var(--accent); }
-.btn-solid:hover { opacity: 0.9; }
-.btn-ghost:hover { background: var(--peak-faint); }
-.peak-box { margin-top: 56px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg); }
-#peak { display: block; width: 100%; height: 220px; }
-.peak-caption {
-  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-soft); padding: 10px 0;
-}
+.btn-solid:hover { opacity: 0.88; }
+.btn-ghost:hover { background: var(--wash); }
+.peak-box { margin-top: 60px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg); touch-action: pan-y; }
+#peak { display: block; width: 100%; height: 280px; cursor: crosshair; }
+.peak-caption { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); padding: 10px 0; }
 
-/* Pillars */
-.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 56px; border: 1px solid var(--line); }
-.pillar { padding: 32px 28px; min-width: 0; }
-.pillar + .pillar { border-left: 1px solid var(--line); }
-.pillar h3 { font-size: 18px; margin-bottom: 12px; }
-.pillar p { margin: 0; color: var(--ink-soft); font-size: 16px; }
-.pillar .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 18px; }
-@media (max-width: 760px) {
-  .pillars { grid-template-columns: 1fr; }
-  .pillar + .pillar { border-left: 0; border-top: 1px solid var(--line); }
-}
+/* Principles */
+.three { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 56px; background: var(--bg-raise); }
+.three > div { padding: 34px 28px; min-width: 0; }
+.three > div + div { border-left: 1px solid var(--line); }
+.three h3 { font-size: 18px; margin-bottom: 12px; }
+.three p { margin: 0; color: var(--ink-soft); font-size: 16px; }
+.three .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 18px; }
+@media (max-width: 760px) { .three { grid-template-columns: 1fr; } .three > div + div { border-left: 0; border-top: 1px solid var(--line); } }
 
-/* Systems */
-.systems { margin-top: 48px; border-top: 1px solid var(--line); }
-.sys {
-  display: grid; grid-template-columns: 1.1fr 2fr auto; gap: 8px 32px; align-items: baseline;
-  padding: 22px 0; border-bottom: 1px solid var(--line);
-}
-.sys h3 { font-size: 17px; }
-.sys p { margin: 0; color: var(--ink-soft); font-size: 16px; min-width: 0; }
-.sys .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); text-align: right; white-space: nowrap; }
-@media (max-width: 760px) {
-  .sys { grid-template-columns: 1fr; }
-  .sys .meta { text-align: left; }
-}
-
-/* Method */
+/* Work */
 .band { background: var(--bg-raise); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 52px; }
-.step { min-width: 0; border-top: 2px solid var(--accent); padding-top: 18px; }
-.step b { font-family: var(--font-display); font-weight: 500; font-size: 17px; display: block; margin-bottom: 8px; }
-.step span { color: var(--ink-soft); font-size: 15px; }
-@media (max-width: 860px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+.tabs { display: flex; justify-content: center; gap: 0; margin-top: 44px; border: 1px solid var(--line); width: fit-content; max-width: 100%; margin-inline: auto; overflow-x: auto; }
+.tab { border: 0; background: transparent; padding: 14px 26px; cursor: pointer; font-family: var(--font-display); font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
+.tab + .tab { border-left: 1px solid var(--line); }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+.tab:not([aria-selected="true"]):hover { color: var(--ink); background: var(--wash); }
+.case { display: grid; grid-template-columns: 1fr 1.5fr; gap: 0; margin-top: 28px; border: 1px solid var(--line); background: var(--bg); }
+.case[hidden] { display: none; }
+.case .side { padding: 34px 30px; border-right: 1px solid var(--line); min-width: 0; }
+.case .main { padding: 34px 30px; min-width: 0; }
+.case h3 { font-size: clamp(22px, 3vw, 30px); }
+.case .kind { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }
+.case .sum { color: var(--ink-soft); margin: 14px 0 0; }
+.stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding: 0; list-style: none; }
+.stack li { font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line); padding: 4px 10px; color: var(--ink-soft); }
+.case ul.did { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+.case ul.did li { padding: 14px 0 14px 28px; border-bottom: 1px solid var(--line); position: relative; font-size: 16px; }
+.case ul.did li:first-child { padding-top: 0; }
+.case ul.did li:last-child { border-bottom: 0; padding-bottom: 0; }
+.case ul.did li::before { content: ""; position: absolute; left: 0; top: 24px; width: 12px; height: 1px; background: var(--accent); }
+.case ul.did li:first-child::before { top: 10px; }
+.case .h { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 18px; display: block; }
+@media (max-width: 800px) { .case { grid-template-columns: 1fr; } .case .side { border-right: 0; border-bottom: 1px solid var(--line); } }
+.also { margin-top: 36px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: var(--bg); }
+.also div { padding: 22px 20px; min-width: 0; }
+.also div + div { border-left: 1px solid var(--line); }
+.also b { font-family: var(--font-display); font-weight: 500; font-size: 15px; display: block; }
+.also span { color: var(--ink-soft); font-size: 14px; display: block; margin-top: 6px; }
+@media (max-width: 860px) { .also { grid-template-columns: repeat(2, 1fr); } .also div:nth-child(3) { border-left: 0; } .also div:nth-child(n+3) { border-top: 1px solid var(--line); } }
+@media (max-width: 440px) { .also { grid-template-columns: 1fr; } .also div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 56px; position: relative; }
+.step { min-width: 0; border-top: 2px solid var(--accent); padding-top: 20px; }
+.step b { font-family: var(--font-display); font-weight: 500; font-size: 18px; display: block; margin-bottom: 10px; }
+.step p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+.step .io { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); display: grid; gap: 6px; }
+.step .io span em { font-style: normal; color: var(--accent); }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
 
 /* Team */
-.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; margin-top: 52px; border: 1px solid var(--line); }
-.person { padding: 26px 22px; min-width: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 -1px -1px 0; }
-.person .init {
-  width: 44px; height: 44px; border: 1px solid var(--accent); display: grid; place-items: center;
-  font-family: var(--font-display); font-size: 14px; color: var(--accent); margin-bottom: 16px;
-}
-.person h3 { font-size: 15px; font-family: var(--font-body); font-weight: 600; }
-.person span { display: block; color: var(--ink-soft); font-size: 14px; margin-top: 4px; }
+.groups { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 52px; background: var(--bg-raise); }
+.group { padding: 30px 26px; min-width: 0; }
+.group + .group { border-left: 1px solid var(--line); }
+.group .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 22px; }
+.person { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
+.person:first-of-type { border-top: 0; padding-top: 0; }
+.init { flex: none; width: 42px; height: 42px; border: 1px solid var(--accent); display: grid; place-items: center; font-family: var(--font-display); font-size: 13px; color: var(--accent); }
+.person b { display: block; font-weight: 600; font-size: 16px; }
+.person span { display: block; color: var(--ink-soft); font-size: 14px; line-height: 1.4; }
+@media (max-width: 800px) { .groups { grid-template-columns: 1fr; } .group + .group { border-left: 0; border-top: 1px solid var(--line); } }
 
-/* Contact */
-.contact { text-align: center; }
-.contact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; margin-top: 48px; border: 1px solid var(--line); text-align: left; }
-.contact-list div { padding: 22px 24px; border-right: 1px solid var(--line); min-width: 0; margin-right: -1px; }
-.contact-list dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
-.contact-list dd { margin: 8px 0 0; word-break: break-word; user-select: all; }
-.contact-list { margin-bottom: 0; }
+/* FAQ */
+.faq { max-width: 760px; margin: 48px auto 0; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 22px 40px 22px 0; font-family: var(--font-display); font-weight: 500; font-size: 16px; line-height: 1.35; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 20px; font-family: var(--font-mono); font-size: 22px; color: var(--accent); }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { margin: 0 0 24px; color: var(--ink-soft); max-width: 62ch; }
 
-footer { border-top: 1px solid var(--line); padding-block: 28px; }
+/* Brief builder */
+.brief { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); margin-top: 52px; background: var(--bg); text-align: left; }
+.brief > div { padding: 32px 30px; min-width: 0; }
+.brief > div + div { border-left: 1px solid var(--line); background: var(--bg-raise); }
+.brief .h { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; border: 0; }
+.chips legend { padding: 0; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.chip span { display: block; padding: 8px 14px; border: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
+.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.field { display: block; margin-bottom: 18px; }
+.field > span { display: block; font-size: 14px; color: var(--ink-soft); margin-bottom: 6px; }
+.field input, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); padding: 11px 13px; border-radius: 0; }
+.field textarea { min-height: 84px; resize: vertical; }
+.field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+#out { width: 100%; min-height: 230px; background: var(--bg); border: 1px dashed var(--line); padding: 14px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; resize: none; color: var(--ink); }
+.copy-row { display: flex; gap: 14px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+#copied { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+.send-to { margin: 22px 0 0; color: var(--ink-soft); font-size: 15px; }
+.send-to b { color: var(--ink); font-weight: 600; user-select: all; word-break: break-word; }
+@media (max-width: 800px) { .brief { grid-template-columns: 1fr; } .brief > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+footer { border-top: 1px solid var(--line); padding-block: 30px; }
 footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -191,14 +200,24 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
 
 <header class="top">
   <div class="wrap">
-    <nav class="nav-l" aria-label="Primary">
-      <a href="#build">What we build</a>
-      <a href="#systems">Systems</a>
-    </nav>
-    <a class="brand" href="#top">PEAK FLOW DIGITALS</a>
-    <nav class="nav-r" aria-label="Secondary">
-      <a href="#team">Team</a>
-      <a href="#contact" class="nav-cta">Contact</a>
+    <div class="bar">
+      <nav class="nav l" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#process">Process</a>
+        <a href="#team">Team</a>
+      </nav>
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 20h6l5-15 5 15h6" /><path d="M12 5v15" opacity=".4"/></svg>
+        PEAK FLOW DIGITALS
+      </a>
+      <nav class="nav r" aria-label="Secondary">
+        <a href="#faq">FAQ</a>
+        <button class="toggle" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+        <a href="#brief" class="cta">Start a project</a>
+      </nav>
+    </div>
+    <nav class="strip" aria-label="Sections">
+      <a href="#work">Work</a><a href="#process">Process</a><a href="#team">Team</a><a href="#faq">FAQ</a>
     </nav>
   </div>
 </header>
@@ -206,76 +225,124 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">Digital systems studio &middot; Nigeria</div>
-      <h1>Systems that run themselves.</h1>
-      <p>We build automated software for schools, shops and small businesses, so the work keeps moving without someone watching it.</p>
+      <span class="tag"><i></i>Digital systems studio &middot; Nigeria</span>
+      <h1>Systems that <em>run themselves.</em></h1>
+      <p>We build software that takes over the routine work of a school, a shop or a small business, so it keeps moving when nobody is watching.</p>
       <div class="cta-row">
-        <a class="btn btn-solid" href="#systems">See what we've built</a>
-        <a class="btn btn-ghost" href="#contact">Start a project</a>
+        <a class="btn btn-solid" href="#brief">Start a project</a>
+        <a class="btn btn-ghost" href="#work">See our work</a>
       </div>
     </div>
     <div class="peak-box">
-      <canvas id="peak" aria-label="A symmetric line rising to a peak at the centre and settling on both sides" role="img"></canvas>
-      <div class="wrap peak-caption"><span>Input</span><span>Peak flow</span><span>Output</span></div>
+      <canvas id="peak" role="img" aria-label="A symmetric line that rises to a peak on the centre axis. Moving the pointer across it widens or narrows the peak."></canvas>
+      <div class="wrap peak-caption"><span>Input</span><span>Move across the line to change the flow</span><span>Output</span></div>
     </div>
   </section>
 
-  <section id="build">
+  <section>
     <div class="wrap">
       <div class="center">
-        <div class="eyebrow">What we build</div>
-        <h2 style="margin-top:14px">Software with little to manage</h2>
-        <p class="lede">Our rule is low upkeep. Each system handles its own routine work, so one person can run what used to need a team.</p>
+        <div class="label">Our rule</div>
+        <h2>Low upkeep, by design</h2>
+        <p class="lede">Most small businesses lose hours to routine work that software can do. We build the software, then step back.</p>
       </div>
-      <div class="pillars">
-        <div class="pillar">
-          <span class="tag">Education</span>
-          <h3>Learning platforms</h3>
-          <p>Exam prep, past-question banks, lecture tools and course sites for students and lecturers, with payments and admin built in.</p>
-        </div>
-        <div class="pillar">
-          <span class="tag">Operations</span>
-          <h3>Automation for small teams</h3>
-          <p>Reconciliation, ordering and reporting tools that replace spreadsheets and manual follow-up, including WhatsApp-based ordering.</p>
-        </div>
-        <div class="pillar">
-          <span class="tag">Commerce</span>
-          <h3>Storefronts and delivery</h3>
-          <p>Online shops and delivery platforms for local brands, designed to take orders the way Nigerian customers already buy.</p>
-        </div>
+      <div class="three">
+        <div><span class="k">01 &middot; Runs alone</span><h3>Handles its own routine</h3><p>Orders, reconciliation, grading, reminders and approvals run in the background instead of waiting on a person.</p></div>
+        <div><span class="k">02 &middot; You own it</span><h3>An admin panel, not a dependency</h3><p>You manage content, users and payments yourself. Day-to-day changes never need a call to us.</p></div>
+        <div><span class="k">03 &middot; Built local</span><h3>Fits how Nigeria pays and orders</h3><p>WhatsApp ordering and bank-transfer payments with admin verification, built in from the start.</p></div>
       </div>
     </div>
   </section>
 
-  <section id="systems" class="band">
+  <section id="work" class="band">
     <div class="wrap">
       <div class="center">
-        <div class="eyebrow">Systems</div>
-        <h2 style="margin-top:14px">Built and shipped</h2>
+        <div class="label">Work</div>
+        <h2>What we've built</h2>
+        <p class="lede">Three systems in detail, with the tools behind them.</p>
       </div>
-      <div class="systems">
-        <div class="sys"><h3>Geo-Books</h3><p>Exam prep and university platform for JAMB, WAEC and campus life: CBT practice, past questions, a lecture portal and a tutor marketplace.</p><span class="meta">Edtech</span></div>
-        <div class="sys"><h3>MedPhysio</h3><p>Physiology e-learning site with student login, lessons, an admin panel for the lecturer and an AI assistant.</p><span class="meta">E-learning</span></div>
-        <div class="sys"><h3>Ballast</h3><p>AI operations assistant for small agencies, built for a global market.</p><span class="meta">SaaS</span></div>
-        <div class="sys"><h3>DrawTally</h3><p>Daily reconciliation for POS and agent banking operators in Nigeria.</p><span class="meta">Fintech tool</span></div>
-        <div class="sys"><h3>SchoolPilot</h3><p>Operations dashboard for schools, covering the daily running of the school office.</p><span class="meta">School ops</span></div>
-        <div class="sys"><h3>CHOPDECK</h3><p>Food delivery platform with a dark amber and green look.</p><span class="meta">Delivery</span></div>
-        <div class="sys"><h3>Triumphant</h3><p>Native wear storefront with ordering that connects straight to WhatsApp.</p><span class="meta">Commerce</span></div>
+
+      <div class="tabs" role="tablist" aria-label="Case studies">
+        <button class="tab" role="tab" id="t-geo" aria-controls="p-geo" aria-selected="true" type="button">Geo-Books</button>
+        <button class="tab" role="tab" id="t-med" aria-controls="p-med" aria-selected="false" type="button">MedPhysio</button>
+        <button class="tab" role="tab" id="t-bal" aria-controls="p-bal" aria-selected="false" type="button">Ballast</button>
+      </div>
+
+      <article class="case" id="p-geo" role="tabpanel" aria-labelledby="t-geo">
+        <div class="side">
+          <span class="kind">Education platform</span>
+          <h3>Geo-Books</h3>
+          <p class="sum">One app for exam practice and university life, aimed at JAMB and WAEC candidates and university students in Nigeria.</p>
+          <ul class="stack"><li>Firebase</li><li>Node.js</li><li>Express</li><li>Cloudflare R2</li></ul>
+        </div>
+        <div class="main">
+          <span class="h">What it does</span>
+          <ul class="did">
+            <li>Computer-based test practice on real past-question banks, with performance analytics and bookmarks.</li>
+            <li>An admission predictor, AI explanations for answers, flashcards and a world ranking leaderboard.</li>
+            <li>University tools: hostel finder, CGPA calculator, and lectures with a lecturer dashboard for uploading courses.</li>
+            <li>A tutor hub where independent tutors publish courses, and a marketplace with seller profiles and escrow.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="case" id="p-med" role="tabpanel" aria-labelledby="t-med" hidden>
+        <div class="side">
+          <span class="kind">E-learning site</span>
+          <h3>MedPhysio</h3>
+          <p class="sum">A physiology course site built for a lecturer who wanted to teach and charge online without a developer on call.</p>
+          <ul class="stack"><li>Next.js</li><li>SQLite</li><li>OpenAI</li><li>Railway</li></ul>
+        </div>
+        <div class="main">
+          <span class="h">What it does</span>
+          <ul class="did">
+            <li>Student accounts and login, with courses and lessons the lecturer uploads from an admin panel.</li>
+            <li>An AI assistant that answers student questions on the course material.</li>
+            <li>Subscriptions paid by bank transfer, with a one-tap WhatsApp notice to the admin for verification.</li>
+            <li>Admin pages for payments, lecturers and analytics, protected behind login.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="case" id="p-bal" role="tabpanel" aria-labelledby="t-bal" hidden>
+        <div class="side">
+          <span class="kind">Software as a service</span>
+          <h3>Ballast</h3>
+          <p class="sum">An AI operations assistant for small agencies, built for a global market rather than a local one.</p>
+          <ul class="stack"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li>Express</li><li>Supabase</li><li>Stripe</li><li>Anthropic API</li></ul>
+        </div>
+        <div class="main">
+          <span class="h">What it does</span>
+          <ul class="did">
+            <li>Automates the repeat operational work that small agencies do by hand.</li>
+            <li>Card billing through Stripe, with accounts and data in Supabase.</li>
+            <li>51 automated tests run on every change through continuous integration.</li>
+            <li>Security and accessibility audits completed, with five real vulnerabilities found and fixed, including an open redirect.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="also">
+        <div><b>DrawTally</b><span>Daily reconciliation for POS and agent banking operators.</span></div>
+        <div><b>SchoolPilot</b><span>Operations dashboard for running a school office.</span></div>
+        <div><b>CHOPDECK</b><span>Food delivery platform.</span></div>
+        <div><b>Meridian House</b><span>E-commerce storefront for a retail brand.</span></div>
       </div>
     </div>
   </section>
 
-  <section id="method">
+  <section id="process">
     <div class="wrap">
       <div class="center">
-        <div class="eyebrow">How a project runs</div>
-        <h2 style="margin-top:14px">From brief to hand-over</h2>
+        <div class="label">Process</div>
+        <h2>From brief to hand-over</h2>
+        <p class="lede">Four steps, in this order, with a clear exchange at each one.</p>
       </div>
       <div class="steps">
-        <div class="step"><b>Brief</b><span>We agree what the system must do and what it will cost, in one fixed package.</span></div>
-        <div class="step"><b>Build</b><span>The team designs and codes it, sharing working versions early so you can react.</span></div>
-        <div class="step"><b>Launch</b><span>We deploy it, connect your domain and payments, and stay on hand during launch.</span></div>
-        <div class="step"><b>Hand over</b><span>You get an admin panel to run it yourself, without calling us for routine changes.</span></div>
+        <div class="step"><b>Brief</b><p>We agree what the system must do and what it will cost, in one fixed package.</p><div class="io"><span><em>You bring</em> the problem</span><span><em>You get</em> a written scope</span></div></div>
+        <div class="step"><b>Build</b><p>We design and code it, and share working versions early so you can react.</p><div class="io"><span><em>You bring</em> feedback</span><span><em>You get</em> a working preview</span></div></div>
+        <div class="step"><b>Launch</b><p>We deploy it, connect your domain and payments, and stay close through launch.</p><div class="io"><span><em>You bring</em> your accounts</span><span><em>You get</em> a live system</span></div></div>
+        <div class="step"><b>Hand over</b><p>You get an admin panel to run it, so routine changes never wait on us.</p><div class="io"><span><em>You bring</em> your content</span><span><em>You get</em> control</span></div></div>
       </div>
     </div>
   </section>
@@ -283,30 +350,79 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
   <section id="team" class="band">
     <div class="wrap">
       <div class="center">
-        <div class="eyebrow">Team</div>
-        <h2 style="margin-top:14px">Four divisions, one standard</h2>
+        <div class="label">Team</div>
+        <h2>Three divisions, one standard</h2>
         <p class="lede">Programming, graphics and advertising work side by side, so a build ships with its design and its audience ready.</p>
       </div>
-      <div class="team">
-        <div class="person"><div class="init">MM</div><h3>Musa Mustapha</h3><span>Head of Peak Flow Digitals and Head of Programming</span></div>
-        <div class="person"><div class="init">OM</div><h3>Olaniyan Mayowa</h3><span>Vice Head of Programming</span></div>
-        <div class="person"><div class="init">AY</div><h3>Ajayi Yosola</h3><span>Head of Graphics and Vice Head</span></div>
-        <div class="person"><div class="init">SE</div><h3>Samuel Enitan</h3><span>Vice Head of Graphics</span></div>
-        <div class="person"><div class="init">AS</div><h3>Abdul Raheem Shofun</h3><span>Head of Advertising and Social Media</span></div>
+      <div class="groups">
+        <div class="group">
+          <span class="k">Programming</span>
+          <div class="person"><div class="init">MM</div><div><b>Musa Mustapha</b><span>Head of Programming and head of Peak Flow Digitals</span></div></div>
+          <div class="person"><div class="init">OM</div><div><b>Olaniyan Mayowa</b><span>Vice Head of Programming</span></div></div>
+        </div>
+        <div class="group">
+          <span class="k">Graphics</span>
+          <div class="person"><div class="init">AY</div><div><b>Ajayi Yosola</b><span>Head of Graphics and Vice Head</span></div></div>
+          <div class="person"><div class="init">SE</div><div><b>Samuel Enitan</b><span>Vice Head of Graphics</span></div></div>
+        </div>
+        <div class="group">
+          <span class="k">Advertising</span>
+          <div class="person"><div class="init">AS</div><div><b>Abdul Raheem Shofun</b><span>Head of Advertising and Social Media</span></div></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="contact">
+  <section id="faq">
     <div class="wrap">
-      <div class="eyebrow">Contact</div>
-      <h2 style="margin-top:14px">Have something to automate?</h2>
-      <p class="lede">Tell us what takes up your week. We'll tell you if software can take it over, and what that would cost.</p>
-      <dl class="contact-list">
-        <div><dt>WhatsApp</dt><dd>Join the public "Peak Flow" group</dd></div>
-        <div><dt>TikTok</dt><dd>@peakflowdigitals</dd></div>
-        <div><dt>Email</dt><dd>peak.flow.digitals@gmail.com</dd></div>
-      </dl>
+      <div class="center">
+        <div class="label">Questions</div>
+        <h2>Before you reach out</h2>
+      </div>
+      <div class="faq">
+        <details open><summary>Do I need to be technical?</summary><p>No. We ask in plain language what takes up your time, then build around it. You run the finished system from an admin panel that needs no coding.</p></details>
+        <details><summary>Can customers order and pay through WhatsApp and bank transfer?</summary><p>Yes. We have built WhatsApp-based ordering, and bank-transfer payments where an admin verifies each payment before access is granted.</p></details>
+        <details><summary>How long does a build take, and what does it cost?</summary><p>Both depend on the scope. After the brief we give you a fixed package with the price, so you know the cost before any work starts.</p></details>
+        <details><summary>What happens after launch?</summary><p>We stay close through launch to fix what real use turns up. After that you manage content, users and payments yourself from the admin panel.</p></details>
+        <details><summary>Do you build for businesses outside Nigeria?</summary><p>Yes. Ballast is built for a global market, with card billing through Stripe.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="brief" class="band">
+    <div class="wrap">
+      <div class="center">
+        <div class="label">Start a project</div>
+        <h2>Write your brief in a minute</h2>
+        <p class="lede">Pick what you want to automate. We write the message for you to send.</p>
+      </div>
+      <div class="brief">
+        <div>
+          <span class="h">Your details</span>
+          <form id="form" onsubmit="return false">
+            <fieldset class="chips">
+              <legend class="sr" style="position:absolute;left:-9999px">What do you want to automate?</legend>
+              <label class="chip"><input type="checkbox" id="c1" value="selling online and taking orders" checked><span>Selling online</span></label>
+              <label class="chip"><input type="checkbox" id="c2" value="orders and enquiries on WhatsApp"><span>WhatsApp orders</span></label>
+              <label class="chip"><input type="checkbox" id="c3" value="online courses, lessons or exams"><span>Courses and exams</span></label>
+              <label class="chip"><input type="checkbox" id="c4" value="payment tracking and reconciliation"><span>Payments</span></label>
+              <label class="chip"><input type="checkbox" id="c5" value="running a school or institution"><span>School operations</span></label>
+              <label class="chip"><input type="checkbox" id="c6" value="something else"><span>Something else</span></label>
+            </fieldset>
+            <label class="field"><span>Your business or project</span><input id="biz" type="text" placeholder="For example, a native wear shop in Ilorin"></label>
+            <label class="field"><span>What takes most of your time right now?</span><textarea id="pain" placeholder="For example, I answer the same order questions all day"></textarea></label>
+          </form>
+        </div>
+        <div>
+          <span class="h">Your message</span>
+          <textarea id="out" readonly aria-label="Generated message"></textarea>
+          <div class="copy-row">
+            <button class="btn btn-solid" id="copy" type="button">Copy message</button>
+            <span id="copied" role="status"></span>
+          </div>
+          <p class="send-to">Send it in the public <b>Peak Flow</b> WhatsApp group, or email <b>peak.flow.digitals@gmail.com</b>. TikTok: <b>@peakflowdigitals</b></p>
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -317,70 +433,147 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
 
 <script>
 (function () {
+  /* Theme toggle */
+  var root = document.documentElement;
+  var btn = document.getElementById('theme');
+  function effective() {
+    var t = root.getAttribute('data-theme');
+    if (t) return t;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function label() { btn.textContent = effective() === 'dark' ? 'Light' : 'Dark'; }
+  try { var saved = localStorage.getItem('pfd-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  label();
+  btn.addEventListener('click', function () {
+    var next = effective() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('pfd-theme', next); } catch (e) {}
+    label();
+    if (window.__peakRedraw) window.__peakRedraw();
+  });
+
+  /* Case-study tabs */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function show(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.tabIndex = i === 0 ? 0 : -1;
+    t.addEventListener('click', function () { show(t); });
+    t.addEventListener('keydown', function (e) {
+      var n = null;
+      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (n) { e.preventDefault(); show(n); n.focus(); }
+    });
+  });
+
+  /* Brief builder */
+  var out = document.getElementById('out');
+  var biz = document.getElementById('biz');
+  var pain = document.getElementById('pain');
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip input'));
+  function build() {
+    var picks = chips.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+    var what = picks.length ? picks.join(', ') : '[what you want to automate]';
+    var b = biz.value.trim() || '[your business or project]';
+    var p = pain.value.trim() || '[what takes most of your time]';
+    out.value = 'Hello Peak Flow Digitals,\n\nI run: ' + b + '.\n\nI want to automate: ' + what + '.\n\nWhat takes most of my time: ' + p + '.\n\nCan software take this over, and what would it involve?';
+  }
+  chips.forEach(function (c) { c.addEventListener('change', build); });
+  biz.addEventListener('input', build);
+  pain.addEventListener('input', build);
+  build();
+  var copied = document.getElementById('copied');
+  document.getElementById('copy').addEventListener('click', function () {
+    function ok() { copied.textContent = 'Copied'; setTimeout(function () { copied.textContent = ''; }, 2200); }
+    function fallback() { out.focus(); out.select(); copied.textContent = 'Selected. Press copy on your keyboard.'; }
+    try {
+      navigator.clipboard.writeText(out.value).then(ok, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  /* Peak line */
   var c = document.getElementById('peak');
-  if (!c) return;
   var ctx = c.getContext('2d');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var w = 0, h = 0, dpr = 1;
+  var w = 0, h = 0, spread = 1, target = 1;
 
   function size() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = c.clientWidth; h = c.clientHeight;
     c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-
-  // Gaussian peak: height at normalised distance d from the centre axis.
-  function peak(d, width) { return Math.exp(-(d * d) / (2 * width * width)); }
+  function gauss(d, s) { return Math.exp(-(d * d) / (2 * s * s)); }
 
   function draw(t) {
-    var css = getComputedStyle(document.documentElement);
-    var line = css.getPropertyValue('--peak').trim() || '#99A4FF';
-    var faint = css.getPropertyValue('--peak-faint').trim() || 'rgba(153,164,255,0.2)';
+    var css = getComputedStyle(root);
+    var line = css.getPropertyValue('--peak').trim() || '#9AA6FF';
+    var faint = css.getPropertyValue('--peak-faint').trim() || 'rgba(154,166,255,0.2)';
     ctx.clearRect(0, 0, w, h);
-    var base = h - 28, amp = h - 64, mid = w / 2;
+    var base = h - 40, amp = h - 84, mid = w / 2;
 
-    // Baseline and centre axis
     ctx.strokeStyle = faint; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(0, base + 0.5); ctx.lineTo(w, base + 0.5); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(mid + 0.5, 12); ctx.lineTo(mid + 0.5, base); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(mid + 0.5, 14); ctx.lineTo(mid + 0.5, base + 12); ctx.stroke();
 
-    // Layered peaks, mirrored by construction (function of |x - mid|)
+    /* Ticks, mirrored about the axis */
+    var gap = 24, n = Math.ceil(mid / gap);
+    for (var k = -n; k <= n; k++) {
+      var x = mid + k * gap;
+      var major = k % 5 === 0;
+      ctx.beginPath(); ctx.moveTo(x + 0.5, base); ctx.lineTo(x + 0.5, base + (major ? 12 : 6)); ctx.stroke();
+    }
+
     var layers = [
-      { width: 0.30, scale: 0.40, a: 0.35 },
-      { width: 0.20, scale: 0.65, a: 0.55 },
-      { width: 0.11, scale: 1.00, a: 1.00 }
+      { s: 0.30, a: 0.38, k: 0.42, wd: 1.25 },
+      { s: 0.20, a: 0.6, k: 0.68, wd: 1.25 },
+      { s: 0.11, a: 1, k: 1, wd: 2.2 }
     ];
+    ctx.strokeStyle = line;
     for (var i = 0; i < layers.length; i++) {
       var L = layers[i];
-      var breathe = reduce ? 1 : 1 + 0.05 * Math.sin(t / 1400 + i * 1.3);
+      var br = reduce ? 1 : 1 + 0.045 * Math.sin(t / 1300 + i * 1.3);
+      var sp = L.s * spread;
+      var hh = amp * L.k * br / (0.55 + 0.45 * spread);
       ctx.beginPath();
-      for (var x = 0; x <= w; x += 2) {
-        var d = Math.abs(x - mid) / w;
-        var y = base - amp * L.scale * breathe * peak(d, L.width);
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      for (var x2 = 0; x2 <= w; x2 += 2) {
+        var d = Math.abs(x2 - mid) / w;
+        var y = base - hh * gauss(d, sp);
+        if (x2 === 0) ctx.moveTo(x2, y); else ctx.lineTo(x2, y);
       }
-      ctx.globalAlpha = L.a;
-      ctx.strokeStyle = line;
-      ctx.lineWidth = i === 2 ? 2 : 1.25;
-      ctx.stroke();
+      ctx.globalAlpha = L.a; ctx.lineWidth = L.wd; ctx.stroke();
     }
     ctx.globalAlpha = 1;
-
-    // Marker on the summit
-    var top = base - amp * (reduce ? 1 : 1 + 0.05 * Math.sin(t / 1400 + 2.6));
-    ctx.fillStyle = line;
-    ctx.fillRect(mid - 3, top - 3, 6, 6);
+    var top = base - amp * (reduce ? 1 : 1 + 0.045 * Math.sin(t / 1300 + 2.6)) / (0.55 + 0.45 * spread);
+    ctx.fillStyle = line; ctx.fillRect(mid - 4, top - 4, 8, 8);
   }
 
-  function frame(t) { draw(t); if (!reduce) requestAnimationFrame(frame); }
+  function frame(t) {
+    spread += (target - spread) * 0.08;
+    draw(t);
+    requestAnimationFrame(frame);
+  }
+  function setTarget(clientX) {
+    var r = c.getBoundingClientRect();
+    var dx = Math.abs(clientX - (r.left + r.width / 2)) / (r.width / 2);
+    target = 0.65 + Math.min(dx, 1) * 1.0;
+  }
 
   size();
   window.addEventListener('resize', function () { size(); if (reduce) draw(0); });
+  window.__peakRedraw = function () { if (reduce) draw(0); };
   if (reduce) {
     draw(0);
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { draw(0); });
   } else {
+    c.addEventListener('pointermove', function (e) { setTarget(e.clientX); });
+    c.addEventListener('pointerleave', function () { target = 1; });
     requestAnimationFrame(frame);
   }
 })();
