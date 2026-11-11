@@ -1,383 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Peak Flow Digitals</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<meta name="description" content="Peak Flow Digitals builds software that takes over the routine work of a school, a shop or a small business, so it keeps moving when nobody is watching.">
+<meta name="theme-color" content="#0D1310">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8F53C'/%3E%3Cpath d='M5 25 L12 9 L17 19 L21 13 L27 25' fill='none' stroke='%230D1310' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700;800&family=DM+Sans:wght@400;500;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one centred axis. Sections mirror left and right around it, like a drawing sheet. The pointer-reactive peak line in the hero is the single bold moment. */
 :root {
-  --bg: #F3F4FB;
-  --bg-raise: #FFFFFF;
-  --ink: #12142B;
-  --ink-soft: #4A4E70;
-  --line: #D3D6EA;
-  --grid: rgba(52, 65, 214, 0.07);
-  --accent: #3441D6;
-  --accent-ink: #FFFFFF;
-  --peak: #3441D6;
-  --peak-faint: rgba(52, 65, 214, 0.22);
-  --wash: rgba(52, 65, 214, 0.08);
+  --ink: #0D1310;
+  --ink-raise: #161E19;
+  --ink-line: #2A352E;
+  --paper: #F3F0E7;
+  --paper-raise: #FFFFFF;
+  --paper-line: #D9D4C5;
+  --lime: #C8F53C;
+  --forest: #123D2D;
+  --text-on-ink: #F3F0E7;
+  --text-soft-ink: #9BA89F;
+  --text-soft-paper: #586158;
 
-  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
-  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #080A1C; --bg-raise: #0F1230; --ink: #EAECFB; --ink-soft: #9AA0C9; --line: #232850;
-    --grid: rgba(153, 166, 255, 0.07); --accent: #9AA6FF; --accent-ink: #080A1C;
-    --peak: #9AA6FF; --peak-faint: rgba(154, 166, 255, 0.2); --wash: rgba(154, 166, 255, 0.09);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #080A1C; --bg-raise: #0F1230; --ink: #EAECFB; --ink-soft: #9AA0C9; --line: #232850;
-  --grid: rgba(153, 166, 255, 0.07); --accent: #9AA6FF; --accent-ink: #080A1C;
-  --peak: #9AA6FF; --peak-faint: rgba(154, 166, 255, 0.2); --wash: rgba(154, 166, 255, 0.09);
-  color-scheme: dark;
-}
+  --display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
+  --pad: 80px;
+}
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 110px; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6; overflow-x: hidden; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text-on-ink); font: 400 17px/1.55 var(--body); overflow-x: hidden; }
 a { color: inherit; }
-button, textarea, input { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+button, input, textarea { font: inherit; color: inherit; }
+img, svg, canvas { max-width: 100%; }
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+h1, h2, h3, p { margin: 0; }
 
-.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-section { padding-block: 96px; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.15; text-wrap: balance; margin: 0; }
-h2 { font-size: clamp(26px, 4.6vw, 44px); letter-spacing: -0.01em; }
-.center { text-align: center; }
-.lede { color: var(--ink-soft); max-width: 60ch; margin: 18px auto 0; }
+.pad { padding-left: max(var(--pad), env(safe-area-inset-left)); padding-right: max(var(--pad), env(safe-area-inset-right)); }
+.sec { padding-top: 120px; padding-bottom: 120px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
+.on-paper .eyebrow { color: var(--forest); }
+.d-l { font: 700 clamp(38px, 5.6vw, 64px)/1.05 var(--display); letter-spacing: -.03em; text-wrap: balance; }
+.d-m { font: 700 clamp(26px, 2.6vw, 36px)/1.15 var(--display); letter-spacing: -.015em; text-wrap: balance; }
+.h-s { font: 600 22px/1.25 var(--display); }
+.lede { font-size: 20px; line-height: 1.5; color: var(--text-soft-ink); max-width: 640px; }
+.on-paper .lede { color: var(--text-soft-paper); }
+.head { display: grid; gap: 24px; }
 
-/* Section label with a rule either side, so the axis stays visible */
-.label { display: flex; align-items: center; gap: 16px; justify-content: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; }
-.label::before, .label::after { content: ""; height: 1px; width: min(90px, 18vw); background: var(--line); }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 18px 30px; border-radius: 999px; font: 700 16px/1.2 var(--body); text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .15s, background .15s, opacity .15s; }
+.btn:active { transform: scale(.98); }
+.btn-lime { background: var(--lime); color: var(--ink); }
+.btn-lime:hover { opacity: .9; }
+.btn-ghost { border-color: var(--text-soft-ink); color: var(--text-on-ink); background: transparent; }
+.btn-ghost:hover { background: rgba(243,240,231,.08); }
+.btn-ink { background: var(--ink); color: var(--text-on-ink); }
+.btn-ink:hover { background: var(--ink-raise); }
 
-/* Header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
-.bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; gap: 12px; }
-.brand { font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 10px; justify-content: center; }
-.mark { width: 22px; height: 22px; display: block; }
-.nav { display: flex; gap: 22px; font-size: 14px; }
-.nav a { text-decoration: none; color: var(--ink-soft); }
-.nav a:hover { color: var(--ink); }
-.nav.l { justify-content: flex-start; }
-.nav.r { justify-content: flex-end; align-items: center; }
-.toggle { border: 1px solid var(--line); background: transparent; padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; color: var(--ink-soft); }
-.toggle:hover { color: var(--ink); border-color: var(--accent); }
-.nav .cta { color: var(--accent); font-weight: 600; }
-.strip { display: none; }
-@media (max-width: 760px) {
-  .bar { grid-template-columns: 1fr auto; }
-  .nav.l { display: none; }
-  .brand { justify-content: flex-start; }
-  .nav.r a:not(.cta) { display: none; }
-  .strip { display: flex; gap: 22px; overflow-x: auto; padding-bottom: 10px; font-size: 14px; scrollbar-width: none; }
-  .strip a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; }
-}
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 88px; background: rgba(13,19,16,.88); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--ink-line); }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font: 600 17px/1 var(--display); letter-spacing: .04em; white-space: nowrap; }
+.mark { width: 40px; height: 40px; border-radius: 10px; background: var(--lime); display: grid; place-items: center; flex: none; }
+.links { display: flex; gap: 44px; }
+.links a { text-decoration: none; color: var(--text-soft-ink); font-size: 16px; }
+.links a:hover { color: var(--text-on-ink); }
+.nav .btn { padding: 12px 26px; }
 
 /* Hero */
-.hero { padding-block: 72px 0; text-align: center; position: relative; }
-.hero::before { content: ""; position: absolute; inset: 0 0 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 48px 48px; background-position: center top; -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 25%, transparent 75%); pointer-events: none; }
-.hero > * { position: relative; }
-.hero .tag { display: inline-flex; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--line); padding: 6px 14px; background: var(--bg); }
-.hero .tag i { width: 6px; height: 6px; background: var(--accent); display: block; }
-.hero h1 { font-size: clamp(31px, 8.4vw, 98px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; margin-top: 28px; }
-.hero h1 em { font-style: normal; color: var(--accent); }
-.hero p { color: var(--ink-soft); max-width: 56ch; margin: 26px auto 0; font-size: clamp(17px, 2.2vw, 20px); }
-.cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-.btn { display: inline-block; padding: 14px 26px; text-decoration: none; font-weight: 600; font-size: 15px; border: 1px solid var(--accent); cursor: pointer; background: transparent; }
-.btn-solid { background: var(--accent); color: var(--accent-ink); }
-.btn-ghost { color: var(--accent); }
-.btn-solid:hover { opacity: 0.88; }
-.btn-ghost:hover { background: var(--wash); }
-.peak-box { margin-top: 60px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg); touch-action: pan-y; }
-#peak { display: block; width: 100%; height: 280px; cursor: crosshair; }
-.peak-caption { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); padding: 10px 0; }
+.hero { padding-top: 96px; padding-bottom: 72px; display: grid; gap: 36px; }
+.tag { justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border: 1px solid var(--ink-line); border-radius: 999px; font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-soft-ink); }
+.tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+.hero h1 { font: 800 clamp(48px, 8.4vw, 112px)/1 var(--display); letter-spacing: -.035em; text-wrap: balance; }
+.hero h1 span { color: var(--lime); display: block; }
+.hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+.hero-row p { max-width: 620px; font-size: 20px; line-height: 1.5; color: var(--text-soft-ink); }
+.cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.peak { border-top: 1px solid var(--ink-line); border-bottom: 1px solid var(--ink-line); }
+#peak { display: block; width: 100%; height: 300px; cursor: crosshair; touch-action: pan-y; }
+.peak-cap { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; padding-bottom: 20px; font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-soft-ink); }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat { padding: 44px 24px 52px 32px; border-left: 1px solid var(--ink-line); }
+.stat:first-child { padding-left: 0; border-left: 0; }
+.stat b { display: block; font: 800 clamp(44px, 5vw, 64px)/1.05 var(--display); letter-spacing: -.02em; color: var(--lime); margin-bottom: 10px; }
+.stat span { color: var(--text-soft-ink); font-size: 16px; }
 
 /* Principles */
-.three { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 56px; background: var(--bg-raise); }
-.three > div { padding: 34px 28px; min-width: 0; }
-.three > div + div { border-left: 1px solid var(--line); }
-.three h3 { font-size: 18px; margin-bottom: 12px; }
-.three p { margin: 0; color: var(--ink-soft); font-size: 16px; }
-.three .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 18px; }
-@media (max-width: 760px) { .three { grid-template-columns: 1fr; } .three > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+.cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.card { display: grid; align-content: start; gap: 20px; padding: 40px 36px 44px; background: var(--ink-raise); border: 1px solid var(--ink-line); border-radius: 28px; }
+.card p { color: var(--text-soft-ink); }
 
 /* Work */
-.band { background: var(--bg-raise); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.tabs { display: flex; justify-content: center; gap: 0; margin-top: 44px; border: 1px solid var(--line); width: fit-content; max-width: 100%; margin-inline: auto; overflow-x: auto; }
-.tab { border: 0; background: transparent; padding: 14px 26px; cursor: pointer; font-family: var(--font-display); font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
-.tab + .tab { border-left: 1px solid var(--line); }
-.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
-.tab:not([aria-selected="true"]):hover { color: var(--ink); background: var(--wash); }
-.case { display: grid; grid-template-columns: 1fr 1.5fr; gap: 0; margin-top: 28px; border: 1px solid var(--line); background: var(--bg); }
-.case[hidden] { display: none; }
-.case .side { padding: 34px 30px; border-right: 1px solid var(--line); min-width: 0; }
-.case .main { padding: 34px 30px; min-width: 0; }
-.case h3 { font-size: clamp(22px, 3vw, 30px); }
-.case .kind { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }
-.case .sum { color: var(--ink-soft); margin: 14px 0 0; }
-.stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding: 0; list-style: none; }
-.stack li { font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line); padding: 4px 10px; color: var(--ink-soft); }
-.case ul.did { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
-.case ul.did li { padding: 14px 0 14px 28px; border-bottom: 1px solid var(--line); position: relative; font-size: 16px; }
-.case ul.did li:first-child { padding-top: 0; }
-.case ul.did li:last-child { border-bottom: 0; padding-bottom: 0; }
-.case ul.did li::before { content: ""; position: absolute; left: 0; top: 24px; width: 12px; height: 1px; background: var(--accent); }
-.case ul.did li:first-child::before { top: 10px; }
-.case .h { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 18px; display: block; }
-@media (max-width: 800px) { .case { grid-template-columns: 1fr; } .case .side { border-right: 0; border-bottom: 1px solid var(--line); } }
-.also { margin-top: 36px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: var(--bg); }
-.also div { padding: 22px 20px; min-width: 0; }
-.also div + div { border-left: 1px solid var(--line); }
-.also b { font-family: var(--font-display); font-weight: 500; font-size: 15px; display: block; }
-.also span { color: var(--ink-soft); font-size: 14px; display: block; margin-top: 6px; }
-@media (max-width: 860px) { .also { grid-template-columns: repeat(2, 1fr); } .also div:nth-child(3) { border-left: 0; } .also div:nth-child(n+3) { border-top: 1px solid var(--line); } }
-@media (max-width: 440px) { .also { grid-template-columns: 1fr; } .also div + div { border-left: 0; border-top: 1px solid var(--line); } }
+.on-paper { background: var(--paper); color: var(--ink); }
+.work-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+.work-head .lede { max-width: 360px; font-size: 18px; }
+.cases { display: grid; gap: 28px; margin-top: 56px; }
+.case { display: grid; grid-template-columns: 420px 1fr; gap: 56px; padding: 48px; background: var(--paper-raise); border: 1px solid var(--paper-line); border-radius: 32px; }
+.case .kind { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--forest); margin-bottom: 18px; }
+.case h3 { font: 700 clamp(38px, 5.6vw, 64px)/1.05 var(--display); letter-spacing: -.03em; margin-bottom: 18px; }
+.case .sum { color: var(--text-soft-paper); }
+.stack { display: flex; flex-wrap: wrap; gap: 8px; padding: 22px 0 0; margin: 0; list-style: none; }
+.stack li { padding: 7px 14px; border: 1px solid var(--paper-line); border-radius: 999px; font: 500 12px/1.3 var(--mono); }
+.did { margin: 0; padding: 0; list-style: none; }
+.did li { display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--paper-line); }
+.did li:first-child { padding-top: 0; }
+.did li:last-child { border-bottom: 0; padding-bottom: 0; }
+.did li::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 8px; border-radius: 2px; background: var(--forest); }
+.also { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; }
+.also div { padding: 28px 24px 8px 28px; border-top: 1px solid var(--paper-line); border-left: 1px solid var(--paper-line); }
+.also div:first-child { padding-left: 0; border-left: 0; }
+.also b { display: block; font: 600 22px/1.25 var(--display); margin-bottom: 10px; }
+.also span { color: var(--text-soft-paper); }
 
 /* Process */
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 56px; position: relative; }
-.step { min-width: 0; border-top: 2px solid var(--accent); padding-top: 20px; }
-.step b { font-family: var(--font-display); font-weight: 500; font-size: 18px; display: block; margin-bottom: 10px; }
-.step p { margin: 0; color: var(--ink-soft); font-size: 15px; }
-.step .io { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); display: grid; gap: 6px; }
-.step .io span em { font-style: normal; color: var(--accent); }
-@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+.process { background: var(--forest); }
+.process .lede { color: rgba(243,240,231,.75); }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 64px; }
+.step { padding-top: 28px; border-top: 3px solid var(--lime); display: grid; grid-template-rows: auto auto 1fr auto; gap: 18px; }
+.step p { color: rgba(243,240,231,.75); }
+.step dl { margin: 0; padding-top: 18px; border-top: 1px solid rgba(155,168,159,.5); display: grid; gap: 8px; }
+.step dl div { display: flex; gap: 10px; flex-wrap: wrap; }
+.step dt { font: 500 12px/1.9 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
+.step dd { margin: 0; }
 
 /* Team */
-.groups { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 52px; background: var(--bg-raise); }
-.group { padding: 30px 26px; min-width: 0; }
-.group + .group { border-left: 1px solid var(--line); }
-.group .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 22px; }
-.person { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
-.person:first-of-type { border-top: 0; padding-top: 0; }
-.init { flex: none; width: 42px; height: 42px; border: 1px solid var(--accent); display: grid; place-items: center; font-family: var(--font-display); font-size: 13px; color: var(--accent); }
-.person b { display: block; font-weight: 600; font-size: 16px; }
-.person span { display: block; color: var(--ink-soft); font-size: 14px; line-height: 1.4; }
-@media (max-width: 800px) { .groups { grid-template-columns: 1fr; } .group + .group { border-left: 0; border-top: 1px solid var(--line); } }
+.groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+.group { padding: 36px; background: var(--ink-raise); border: 1px solid var(--ink-line); border-radius: 28px; }
+.group .eyebrow { display: block; margin-bottom: 20px; }
+.person { display: flex; align-items: center; gap: 16px; padding: 20px 0; border-top: 1px solid var(--ink-line); }
+.avatar { flex: none; width: 52px; height: 52px; display: grid; place-items: center; border: 1.5px solid var(--lime); border-radius: 50%; font: 500 12px/1 var(--mono); color: var(--lime); }
+.person b { display: block; font: 600 22px/1.25 var(--display); }
+.person span { display: block; color: var(--text-soft-ink); line-height: 1.4; }
 
 /* FAQ */
-.faq { max-width: 760px; margin: 48px auto 0; border-top: 1px solid var(--line); }
-.faq details { border-bottom: 1px solid var(--line); }
-.faq summary { list-style: none; cursor: pointer; padding: 22px 40px 22px 0; font-family: var(--font-display); font-weight: 500; font-size: 16px; line-height: 1.35; position: relative; }
+.faq-wrap { display: grid; grid-template-columns: 380px 1fr; gap: 80px; align-items: start; }
+.faq { border-top: 1px solid var(--paper-line); }
+.faq details { border-bottom: 1px solid var(--paper-line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 28px 0; font: 600 22px/1.25 var(--display); }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: "+"; position: absolute; right: 4px; top: 20px; font-family: var(--font-mono); font-size: 22px; color: var(--accent); }
-.faq details[open] summary::after { content: "\2212"; }
-.faq details p { margin: 0 0 24px; color: var(--ink-soft); max-width: 62ch; }
+.faq summary::after { content: "+"; flex: none; width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--paper-line); border-radius: 50%; font: 600 22px/1 var(--display); }
+.faq details[open] summary::after { content: "\2212"; background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.faq details p { max-width: 640px; padding: 0 0 28px; color: var(--text-soft-paper); }
 
-/* Brief builder */
-.brief { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); margin-top: 52px; background: var(--bg); text-align: left; }
-.brief > div { padding: 32px 30px; min-width: 0; }
-.brief > div + div { border-left: 1px solid var(--line); background: var(--bg-raise); }
-.brief .h { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 18px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; border: 0; }
-.chips legend { padding: 0; }
+/* Contact */
+.contact { background: var(--lime); color: var(--ink); }
+.contact .eyebrow { color: var(--ink); }
+.contact h2 { font: 800 clamp(44px, 7vw, 96px)/1 var(--display); letter-spacing: -.035em; text-wrap: balance; margin: 24px 0 56px; }
+.contact-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; flex-wrap: wrap; }
+.contact-row p { font-size: 20px; max-width: 560px; margin-bottom: 32px; }
+.channels { flex: 0 1 480px; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--ink); }
+.channels li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; border-top: 1px solid var(--ink); }
+.channels span { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.channels b { font: 600 18px/1.25 var(--display); text-align: right; word-break: break-word; }
+
+.brief { display: grid; grid-template-columns: 1fr 1fr; margin-top: 72px; background: var(--ink); color: var(--text-on-ink); border-radius: 32px; overflow: hidden; }
+.brief > div { padding: 40px; min-width: 0; }
+.brief > div + div { background: var(--ink-raise); border-left: 1px solid var(--ink-line); }
+.contact .brief .eyebrow { display: block; margin-bottom: 20px; color: var(--lime); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; padding: 0; border: 0; min-width: 0; }
 .chip { position: relative; }
-.chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.chip span { display: block; padding: 8px 14px; border: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
-.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
-.field { display: block; margin-bottom: 18px; }
-.field > span { display: block; font-size: 14px; color: var(--ink-soft); margin-bottom: 6px; }
-.field input, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); padding: 11px 13px; border-radius: 0; }
-.field textarea { min-height: 84px; resize: vertical; }
-.field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
-#out { width: 100%; min-height: 230px; background: var(--bg); border: 1px dashed var(--line); padding: 14px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; resize: none; color: var(--ink); }
-.copy-row { display: flex; gap: 14px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
-#copied { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
-.send-to { margin: 22px 0 0; color: var(--ink-soft); font-size: 15px; }
-.send-to b { color: var(--ink); font-weight: 600; user-select: all; word-break: break-word; }
-@media (max-width: 800px) { .brief { grid-template-columns: 1fr; } .brief > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+.chip input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+.chip span { display: block; padding: 9px 16px; border: 1px solid var(--ink-line); border-radius: 999px; font-size: 15px; color: var(--text-soft-ink); }
+.chip input:checked + span { background: var(--lime); border-color: var(--lime); color: var(--ink); font-weight: 500; }
+.chip input:focus-visible + span { outline: 2px solid var(--lime); outline-offset: 2px; }
+.field { display: block; margin-bottom: 20px; }
+.field > span { display: block; font-size: 15px; color: var(--text-soft-ink); margin-bottom: 8px; }
+.field input, .field textarea { width: 100%; background: var(--ink); border: 1px solid var(--ink-line); border-radius: 14px; padding: 13px 16px; }
+.field textarea { min-height: 96px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: #66736b; }
+.field input:focus, .field textarea:focus { outline: 2px solid var(--lime); outline-offset: 0; border-color: var(--lime); }
+#out { width: 100%; min-height: 250px; resize: none; background: var(--ink); border: 1px dashed var(--ink-line); border-radius: 14px; padding: 16px; font: 400 13.5px/1.65 var(--mono); }
+.copy-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+#copied { font: 500 12px/1.4 var(--mono); color: var(--lime); }
+.brief .note { margin: 24px 0 0; color: var(--text-soft-ink); font-size: 15px; }
+.brief .note b { color: var(--text-on-ink); font-weight: 500; word-break: break-word; }
+.sr { position: absolute; left: -9999px; }
 
-footer { border-top: 1px solid var(--line); padding-block: 30px; }
-footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 32px; padding-bottom: 32px; font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-soft-ink); }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Tablet */
+@media (max-width: 1024px) {
+  :root { --pad: 40px; }
+  .sec { padding-top: 96px; padding-bottom: 96px; }
+  .links { gap: 28px; }
+  .case { grid-template-columns: 1fr; gap: 36px; padding: 36px; }
+  .steps { grid-template-columns: repeat(2, 1fr); row-gap: 48px; }
+  .also { grid-template-columns: repeat(2, 1fr); }
+  .also div:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .faq-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .brief { grid-template-columns: 1fr; }
+  .brief > div + div { border-left: 0; border-top: 1px solid var(--ink-line); }
+}
+/* Phone */
+@media (max-width: 720px) {
+  :root { --pad: 20px; }
+  body { font-size: 16px; }
+  .sec { padding-top: 72px; padding-bottom: 72px; }
+  .nav { height: 68px; }
+  .links { display: none; }
+  .brand { font-size: 14px; gap: 10px; }
+  .mark { width: 34px; height: 34px; }
+  .nav .btn { padding: 11px 16px; font-size: 14px; white-space: nowrap; flex: none; }
+  .brand { min-width: 0; font-size: 13px; }
+  .hero { padding-top: 56px; padding-bottom: 48px; gap: 28px; }
+  .hero-row { align-items: flex-start; }
+  .hero-row p, .lede, .contact-row p { font-size: 17px; }
+  .cta-row { width: 100%; }
+  .cta-row .btn { flex: 1 1 100%; }
+  #peak { height: 220px; }
+  .peak-cap span:nth-child(2) { display: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat { padding: 28px 16px 32px 20px; border-top: 1px solid var(--ink-line); }
+  .stat:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .stat:nth-child(-n+2) { border-top: 0; }
+  .cards3, .groups { grid-template-columns: 1fr; }
+  .card, .group { padding: 28px 24px 32px; border-radius: 24px; }
+  .case { padding: 28px 22px; border-radius: 24px; gap: 28px; }
+  .case h3 { font-size: 44px; }
+  .also { grid-template-columns: 1fr; margin-top: 40px; }
+  .also div { padding-left: 0; border-left: 0; }
+  .steps { grid-template-columns: 1fr; margin-top: 48px; }
+  .faq summary { font-size: 18px; padding: 22px 0; }
+  .faq details p { padding-bottom: 22px; }
+  .contact h2 { margin-bottom: 40px; }
+  .contact-row { gap: 36px; }
+  .contact-row .btn { width: 100%; }
+  .channels li { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .channels b { text-align: left; }
+  .brief { margin-top: 48px; border-radius: 24px; }
+  .brief > div { padding: 28px 20px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
 </style>
+</head>
+<body>
 
-<header class="top">
-  <div class="wrap">
-    <div class="bar">
-      <nav class="nav l" aria-label="Primary">
-        <a href="#work">Work</a>
-        <a href="#process">Process</a>
-        <a href="#team">Team</a>
-      </nav>
-      <a class="brand" href="#top">
-        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 20h6l5-15 5 15h6" /><path d="M12 5v15" opacity=".4"/></svg>
-        PEAK FLOW DIGITALS
-      </a>
-      <nav class="nav r" aria-label="Secondary">
-        <a href="#faq">FAQ</a>
-        <button class="toggle" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
-        <a href="#brief" class="cta">Start a project</a>
-      </nav>
-    </div>
-    <nav class="strip" aria-label="Sections">
-      <a href="#work">Work</a><a href="#process">Process</a><a href="#team">Team</a><a href="#faq">FAQ</a>
-    </nav>
-  </div>
+<header class="nav pad">
+  <a class="brand" href="#top" aria-label="Peak Flow Digitals, home">
+    <span class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 19 L9 6 L13 14 L16 9 L22 19" stroke="#0D1310" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    PEAK FLOW DIGITALS
+  </a>
+  <nav class="links" aria-label="Primary">
+    <a href="#work">Work</a><a href="#process">Process</a><a href="#team">Team</a><a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn btn-lime" href="#brief">Start a project</a>
 </header>
 
 <main id="top">
-  <section class="hero">
-    <div class="wrap">
-      <span class="tag"><i></i>Digital systems studio &middot; Nigeria</span>
-      <h1>Systems that <em>run themselves.</em></h1>
+  <section class="hero pad">
+    <span class="tag"><i></i>Digital systems studio &middot; Nigeria</span>
+    <h1>Systems that <span>run themselves.</span></h1>
+    <div class="hero-row">
       <p>We build software that takes over the routine work of a school, a shop or a small business, so it keeps moving when nobody is watching.</p>
       <div class="cta-row">
-        <a class="btn btn-solid" href="#brief">Start a project</a>
+        <a class="btn btn-lime" href="#brief">Start a project</a>
         <a class="btn btn-ghost" href="#work">See our work</a>
       </div>
     </div>
-    <div class="peak-box">
-      <canvas id="peak" role="img" aria-label="A symmetric line that rises to a peak on the centre axis. Moving the pointer across it widens or narrows the peak."></canvas>
-      <div class="wrap peak-caption"><span>Input</span><span>Move across the line to change the flow</span><span>Output</span></div>
+  </section>
+
+  <div class="peak">
+    <canvas id="peak" role="img" aria-label="A symmetric line that rises to a peak on the centre axis. Moving the pointer across it widens or narrows the peak."></canvas>
+    <div class="peak-cap pad"><span>Input</span><span>Routine work, handled</span><span>Output</span></div>
+  </div>
+
+  <div class="stats pad">
+    <div class="stat"><b>07</b><span>Systems built and shipped</span></div>
+    <div class="stat"><b>03</b><span>Divisions, one standard</span></div>
+    <div class="stat"><b>51</b><span>Automated tests guarding Ballast</span></div>
+    <div class="stat"><b>05</b><span>Real vulnerabilities found and fixed</span></div>
+  </div>
+
+  <section class="sec pad" aria-labelledby="rule-h">
+    <div class="head">
+      <div class="eyebrow">01 &mdash; Our rule</div>
+      <h2 class="d-l" id="rule-h">Low upkeep, by design.</h2>
+      <p class="lede">Most small businesses lose hours to routine work that software can do. We build the software, then step back.</p>
+    </div>
+    <div class="cards3" style="margin-top:64px">
+      <div class="card"><span class="eyebrow">01 &middot; Runs alone</span><h3 class="d-m">Handles its own routine</h3><p>Orders, reconciliation, grading, reminders and approvals run in the background instead of waiting on a person.</p></div>
+      <div class="card"><span class="eyebrow">02 &middot; You own it</span><h3 class="d-m">An admin panel, not a dependency</h3><p>You manage content, users and payments yourself. Day-to-day changes never need a call to us.</p></div>
+      <div class="card"><span class="eyebrow">03 &middot; Built local</span><h3 class="d-m">Fits how Nigeria pays and orders</h3><p>WhatsApp ordering and bank-transfer payments with admin verification, built in from the start.</p></div>
     </div>
   </section>
 
-  <section>
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Our rule</div>
-        <h2>Low upkeep, by design</h2>
-        <p class="lede">Most small businesses lose hours to routine work that software can do. We build the software, then step back.</p>
+  <section class="sec pad on-paper" id="work" aria-labelledby="work-h">
+    <div class="work-head">
+      <div class="head">
+        <div class="eyebrow">02 &mdash; Work</div>
+        <h2 class="d-l" id="work-h">What we&rsquo;ve built.</h2>
       </div>
-      <div class="three">
-        <div><span class="k">01 &middot; Runs alone</span><h3>Handles its own routine</h3><p>Orders, reconciliation, grading, reminders and approvals run in the background instead of waiting on a person.</p></div>
-        <div><span class="k">02 &middot; You own it</span><h3>An admin panel, not a dependency</h3><p>You manage content, users and payments yourself. Day-to-day changes never need a call to us.</p></div>
-        <div><span class="k">03 &middot; Built local</span><h3>Fits how Nigeria pays and orders</h3><p>WhatsApp ordering and bank-transfer payments with admin verification, built in from the start.</p></div>
-      </div>
+      <p class="lede">Three systems in detail, with the tools behind them.</p>
     </div>
-  </section>
 
-  <section id="work" class="band">
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Work</div>
-        <h2>What we've built</h2>
-        <p class="lede">Three systems in detail, with the tools behind them.</p>
-      </div>
-
-      <div class="tabs" role="tablist" aria-label="Case studies">
-        <button class="tab" role="tab" id="t-geo" aria-controls="p-geo" aria-selected="true" type="button">Geo-Books</button>
-        <button class="tab" role="tab" id="t-med" aria-controls="p-med" aria-selected="false" type="button">MedPhysio</button>
-        <button class="tab" role="tab" id="t-bal" aria-controls="p-bal" aria-selected="false" type="button">Ballast</button>
-      </div>
-
-      <article class="case" id="p-geo" role="tabpanel" aria-labelledby="t-geo">
-        <div class="side">
-          <span class="kind">Education platform</span>
+    <div class="cases">
+      <article class="case">
+        <div>
+          <div class="kind">01 &nbsp;&middot;&nbsp; Education platform</div>
           <h3>Geo-Books</h3>
           <p class="sum">One app for exam practice and university life, aimed at JAMB and WAEC candidates and university students in Nigeria.</p>
           <ul class="stack"><li>Firebase</li><li>Node.js</li><li>Express</li><li>Cloudflare R2</li></ul>
         </div>
-        <div class="main">
-          <span class="h">What it does</span>
-          <ul class="did">
-            <li>Computer-based test practice on real past-question banks, with performance analytics and bookmarks.</li>
-            <li>An admission predictor, AI explanations for answers, flashcards and a world ranking leaderboard.</li>
-            <li>University tools: hostel finder, CGPA calculator, and lectures with a lecturer dashboard for uploading courses.</li>
-            <li>A tutor hub where independent tutors publish courses, and a marketplace with seller profiles and escrow.</li>
-          </ul>
-        </div>
+        <ul class="did">
+          <li>Computer-based test practice on real past-question banks, with performance analytics and bookmarks.</li>
+          <li>An admission predictor, AI explanations for answers, flashcards and a world ranking leaderboard.</li>
+          <li>University tools: hostel finder, CGPA calculator, and lectures with a lecturer dashboard for uploading courses.</li>
+          <li>A tutor hub where independent tutors publish courses, and a marketplace with seller profiles and escrow.</li>
+        </ul>
       </article>
 
-      <article class="case" id="p-med" role="tabpanel" aria-labelledby="t-med" hidden>
-        <div class="side">
-          <span class="kind">E-learning site</span>
+      <article class="case">
+        <div>
+          <div class="kind">02 &nbsp;&middot;&nbsp; E-learning site</div>
           <h3>MedPhysio</h3>
           <p class="sum">A physiology course site built for a lecturer who wanted to teach and charge online without a developer on call.</p>
           <ul class="stack"><li>Next.js</li><li>SQLite</li><li>OpenAI</li><li>Railway</li></ul>
         </div>
-        <div class="main">
-          <span class="h">What it does</span>
-          <ul class="did">
-            <li>Student accounts and login, with courses and lessons the lecturer uploads from an admin panel.</li>
-            <li>An AI assistant that answers student questions on the course material.</li>
-            <li>Subscriptions paid by bank transfer, with a one-tap WhatsApp notice to the admin for verification.</li>
-            <li>Admin pages for payments, lecturers and analytics, protected behind login.</li>
-          </ul>
-        </div>
+        <ul class="did">
+          <li>Student accounts and login, with courses and lessons the lecturer uploads from an admin panel.</li>
+          <li>An AI assistant that answers student questions on the course material.</li>
+          <li>Subscriptions paid by bank transfer, with a one-tap WhatsApp notice to the admin for verification.</li>
+          <li>Admin pages for payments, lecturers and analytics, protected behind login.</li>
+        </ul>
       </article>
 
-      <article class="case" id="p-bal" role="tabpanel" aria-labelledby="t-bal" hidden>
-        <div class="side">
-          <span class="kind">Software as a service</span>
+      <article class="case">
+        <div>
+          <div class="kind">03 &nbsp;&middot;&nbsp; Software as a service</div>
           <h3>Ballast</h3>
           <p class="sum">An AI operations assistant for small agencies, built for a global market rather than a local one.</p>
           <ul class="stack"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li>Express</li><li>Supabase</li><li>Stripe</li><li>Anthropic API</li></ul>
         </div>
-        <div class="main">
-          <span class="h">What it does</span>
-          <ul class="did">
-            <li>Automates the repeat operational work that small agencies do by hand.</li>
-            <li>Card billing through Stripe, with accounts and data in Supabase.</li>
-            <li>51 automated tests run on every change through continuous integration.</li>
-            <li>Security and accessibility audits completed, with five real vulnerabilities found and fixed, including an open redirect.</li>
-          </ul>
-        </div>
+        <ul class="did">
+          <li>Automates the repeat operational work that small agencies do by hand.</li>
+          <li>Card billing through Stripe, with accounts and data in Supabase.</li>
+          <li>51 automated tests run on every change through continuous integration.</li>
+          <li>Security and accessibility audits completed, with five real vulnerabilities found and fixed, including an open redirect.</li>
+        </ul>
       </article>
+    </div>
 
-      <div class="also">
-        <div><b>DrawTally</b><span>Daily reconciliation for POS and agent banking operators.</span></div>
-        <div><b>SchoolPilot</b><span>Operations dashboard for running a school office.</span></div>
-        <div><b>CHOPDECK</b><span>Food delivery platform.</span></div>
-        <div><b>Meridian House</b><span>E-commerce storefront for a retail brand.</span></div>
+    <div class="also">
+      <div><b>DrawTally</b><span>Daily reconciliation for POS and agent banking operators.</span></div>
+      <div><b>SchoolPilot</b><span>Operations dashboard for running a school office.</span></div>
+      <div><b>CHOPDECK</b><span>Food delivery platform.</span></div>
+      <div><b>Meridian House</b><span>E-commerce storefront for a retail brand.</span></div>
+    </div>
+  </section>
+
+  <section class="sec pad process" id="process" aria-labelledby="process-h">
+    <div class="head">
+      <div class="eyebrow">03 &mdash; Process</div>
+      <h2 class="d-l" id="process-h">From brief to hand-over.</h2>
+      <p class="lede">Four steps, in this order, with a clear exchange at each one.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="eyebrow">01</span><h3 class="d-m">Brief</h3><p>We agree what the system must do and what it will cost, in one fixed package.</p><dl><div><dt>You bring</dt><dd>the problem</dd></div><div><dt>You get</dt><dd>a written scope</dd></div></dl></div>
+      <div class="step"><span class="eyebrow">02</span><h3 class="d-m">Build</h3><p>We design and code it, and share working versions early so you can react.</p><dl><div><dt>You bring</dt><dd>feedback</dd></div><div><dt>You get</dt><dd>a working preview</dd></div></dl></div>
+      <div class="step"><span class="eyebrow">03</span><h3 class="d-m">Launch</h3><p>We deploy it, connect your domain and payments, and stay close through launch.</p><dl><div><dt>You bring</dt><dd>your accounts</dd></div><div><dt>You get</dt><dd>a live system</dd></div></dl></div>
+      <div class="step"><span class="eyebrow">04</span><h3 class="d-m">Hand over</h3><p>You get an admin panel to run it, so routine changes never wait on us.</p><dl><div><dt>You bring</dt><dd>your content</dd></div><div><dt>You get</dt><dd>control</dd></div></dl></div>
+    </div>
+  </section>
+
+  <section class="sec pad" id="team" aria-labelledby="team-h">
+    <div class="head">
+      <div class="eyebrow">04 &mdash; Team</div>
+      <h2 class="d-l" id="team-h">Three divisions, one standard.</h2>
+      <p class="lede">Programming, graphics and advertising work side by side, so a build ships with its design and its audience ready.</p>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <span class="eyebrow">Programming</span>
+        <div class="person"><div class="avatar">MM</div><div><b>Musa Mustapha</b><span>Head of Programming and head of Peak Flow Digitals</span></div></div>
+        <div class="person"><div class="avatar">OM</div><div><b>Olaniyan Mayowa</b><span>Vice Head of Programming</span></div></div>
+      </div>
+      <div class="group">
+        <span class="eyebrow">Graphics</span>
+        <div class="person"><div class="avatar">AY</div><div><b>Ajayi Yosola</b><span>Head of Graphics and Vice Head</span></div></div>
+        <div class="person"><div class="avatar">SE</div><div><b>Samuel Enitan</b><span>Vice Head of Graphics</span></div></div>
+      </div>
+      <div class="group">
+        <span class="eyebrow">Advertising</span>
+        <div class="person"><div class="avatar">AS</div><div><b>Abdul Raheem Shofun</b><span>Head of Advertising and Social Media</span></div></div>
       </div>
     </div>
   </section>
 
-  <section id="process">
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Process</div>
-        <h2>From brief to hand-over</h2>
-        <p class="lede">Four steps, in this order, with a clear exchange at each one.</p>
-      </div>
-      <div class="steps">
-        <div class="step"><b>Brief</b><p>We agree what the system must do and what it will cost, in one fixed package.</p><div class="io"><span><em>You bring</em> the problem</span><span><em>You get</em> a written scope</span></div></div>
-        <div class="step"><b>Build</b><p>We design and code it, and share working versions early so you can react.</p><div class="io"><span><em>You bring</em> feedback</span><span><em>You get</em> a working preview</span></div></div>
-        <div class="step"><b>Launch</b><p>We deploy it, connect your domain and payments, and stay close through launch.</p><div class="io"><span><em>You bring</em> your accounts</span><span><em>You get</em> a live system</span></div></div>
-        <div class="step"><b>Hand over</b><p>You get an admin panel to run it, so routine changes never wait on us.</p><div class="io"><span><em>You bring</em> your content</span><span><em>You get</em> control</span></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="team" class="band">
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Team</div>
-        <h2>Three divisions, one standard</h2>
-        <p class="lede">Programming, graphics and advertising work side by side, so a build ships with its design and its audience ready.</p>
-      </div>
-      <div class="groups">
-        <div class="group">
-          <span class="k">Programming</span>
-          <div class="person"><div class="init">MM</div><div><b>Musa Mustapha</b><span>Head of Programming and head of Peak Flow Digitals</span></div></div>
-          <div class="person"><div class="init">OM</div><div><b>Olaniyan Mayowa</b><span>Vice Head of Programming</span></div></div>
-        </div>
-        <div class="group">
-          <span class="k">Graphics</span>
-          <div class="person"><div class="init">AY</div><div><b>Ajayi Yosola</b><span>Head of Graphics and Vice Head</span></div></div>
-          <div class="person"><div class="init">SE</div><div><b>Samuel Enitan</b><span>Vice Head of Graphics</span></div></div>
-        </div>
-        <div class="group">
-          <span class="k">Advertising</span>
-          <div class="person"><div class="init">AS</div><div><b>Abdul Raheem Shofun</b><span>Head of Advertising and Social Media</span></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Questions</div>
-        <h2>Before you reach out</h2>
+  <section class="sec pad on-paper" id="faq" aria-labelledby="faq-h">
+    <div class="faq-wrap">
+      <div class="head">
+        <div class="eyebrow">05 &mdash; Questions</div>
+        <h2 class="d-l" id="faq-h">Before you reach out.</h2>
       </div>
       <div class="faq">
         <details open><summary>Do I need to be technical?</summary><p>No. We ask in plain language what takes up your time, then build around it. You run the finished system from an admin panel that needs no coding.</p></details>
@@ -389,90 +406,55 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
     </div>
   </section>
 
-  <section id="brief" class="band">
-    <div class="wrap">
-      <div class="center">
-        <div class="label">Start a project</div>
-        <h2>Write your brief in a minute</h2>
-        <p class="lede">Pick what you want to automate. We write the message for you to send.</p>
+  <section class="sec pad contact" id="brief" aria-labelledby="contact-h">
+    <div class="eyebrow">06 &mdash; Start a project</div>
+    <h2 id="contact-h">Tell us what&rsquo;s eating your time.</h2>
+    <div class="contact-row">
+      <div>
+        <p>Pick what you want to automate and write us a short brief. We reply with what it would involve and what it costs.</p>
+        <a class="btn btn-ink" href="#builder">Write your brief</a>
       </div>
-      <div class="brief">
-        <div>
-          <span class="h">Your details</span>
-          <form id="form" onsubmit="return false">
-            <fieldset class="chips">
-              <legend class="sr" style="position:absolute;left:-9999px">What do you want to automate?</legend>
-              <label class="chip"><input type="checkbox" id="c1" value="selling online and taking orders" checked><span>Selling online</span></label>
-              <label class="chip"><input type="checkbox" id="c2" value="orders and enquiries on WhatsApp"><span>WhatsApp orders</span></label>
-              <label class="chip"><input type="checkbox" id="c3" value="online courses, lessons or exams"><span>Courses and exams</span></label>
-              <label class="chip"><input type="checkbox" id="c4" value="payment tracking and reconciliation"><span>Payments</span></label>
-              <label class="chip"><input type="checkbox" id="c5" value="running a school or institution"><span>School operations</span></label>
-              <label class="chip"><input type="checkbox" id="c6" value="something else"><span>Something else</span></label>
-            </fieldset>
-            <label class="field"><span>Your business or project</span><input id="biz" type="text" placeholder="For example, a native wear shop in Ilorin"></label>
-            <label class="field"><span>What takes most of your time right now?</span><textarea id="pain" placeholder="For example, I answer the same order questions all day"></textarea></label>
-          </form>
+      <ul class="channels">
+        <li><span>WhatsApp</span><b>Public &ldquo;Peak Flow&rdquo; group</b></li>
+        <li><span>Email</span><b>peak.flow.digitals@gmail.com</b></li>
+        <li><span>TikTok</span><b>@peakflowdigitals</b></li>
+      </ul>
+    </div>
+
+    <div class="brief" id="builder">
+      <div>
+        <span class="eyebrow">Your details</span>
+        <form id="form" onsubmit="return false">
+          <fieldset class="chips">
+            <legend class="sr">What do you want to automate?</legend>
+            <label class="chip"><input type="checkbox" value="selling online and taking orders" checked><span>Selling online</span></label>
+            <label class="chip"><input type="checkbox" value="orders and enquiries on WhatsApp"><span>WhatsApp orders</span></label>
+            <label class="chip"><input type="checkbox" value="online courses, lessons or exams"><span>Courses and exams</span></label>
+            <label class="chip"><input type="checkbox" value="payment tracking and reconciliation"><span>Payments</span></label>
+            <label class="chip"><input type="checkbox" value="running a school or institution"><span>School operations</span></label>
+            <label class="chip"><input type="checkbox" value="something else"><span>Something else</span></label>
+          </fieldset>
+          <label class="field"><span>Your business or project</span><input id="biz" type="text" placeholder="For example, a native wear shop in Ilorin"></label>
+          <label class="field"><span>What takes most of your time right now?</span><textarea id="pain" placeholder="For example, I answer the same order questions all day"></textarea></label>
+        </form>
+      </div>
+      <div>
+        <span class="eyebrow">Your message</span>
+        <textarea id="out" readonly aria-label="Generated message"></textarea>
+        <div class="copy-row">
+          <button class="btn btn-lime" id="copy" type="button">Copy message</button>
+          <span id="copied" role="status"></span>
         </div>
-        <div>
-          <span class="h">Your message</span>
-          <textarea id="out" readonly aria-label="Generated message"></textarea>
-          <div class="copy-row">
-            <button class="btn btn-solid" id="copy" type="button">Copy message</button>
-            <span id="copied" role="status"></span>
-          </div>
-          <p class="send-to">Send it in the public <b>Peak Flow</b> WhatsApp group, or email <b>peak.flow.digitals@gmail.com</b>. TikTok: <b>@peakflowdigitals</b></p>
-        </div>
+        <p class="note">Send it in the public <b>Peak Flow</b> WhatsApp group, or email <b>peak.flow.digitals@gmail.com</b>. TikTok: <b>@peakflowdigitals</b></p>
       </div>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap"><span>Peak Flow Digitals</span><span>Built in Nigeria for the world</span></div>
-</footer>
+<footer class="pad"><span>Peak Flow Digitals</span><span>Built in Nigeria for the world</span></footer>
 
 <script>
 (function () {
-  /* Theme toggle */
-  var root = document.documentElement;
-  var btn = document.getElementById('theme');
-  function effective() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-  function label() { btn.textContent = effective() === 'dark' ? 'Light' : 'Dark'; }
-  try { var saved = localStorage.getItem('pfd-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
-  label();
-  btn.addEventListener('click', function () {
-    var next = effective() === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('pfd-theme', next); } catch (e) {}
-    label();
-    if (window.__peakRedraw) window.__peakRedraw();
-  });
-
-  /* Case-study tabs */
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  function show(tab) {
-    tabs.forEach(function (t) {
-      var on = t === tab;
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-    });
-  }
-  tabs.forEach(function (t, i) {
-    t.tabIndex = i === 0 ? 0 : -1;
-    t.addEventListener('click', function () { show(t); });
-    t.addEventListener('keydown', function (e) {
-      var n = null;
-      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
-      if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
-      if (n) { e.preventDefault(); show(n); n.focus(); }
-    });
-  });
-
   /* Brief builder */
   var out = document.getElementById('out');
   var biz = document.getElementById('biz');
@@ -492,16 +474,15 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
   var copied = document.getElementById('copied');
   document.getElementById('copy').addEventListener('click', function () {
     function ok() { copied.textContent = 'Copied'; setTimeout(function () { copied.textContent = ''; }, 2200); }
-    function fallback() { out.focus(); out.select(); copied.textContent = 'Selected. Press copy on your keyboard.'; }
-    try {
-      navigator.clipboard.writeText(out.value).then(ok, fallback);
-    } catch (e) { fallback(); }
+    function fallback() { out.focus(); out.select(); copied.textContent = 'Selected. Copy it from your keyboard.'; }
+    try { navigator.clipboard.writeText(out.value).then(ok, fallback); } catch (e) { fallback(); }
   });
 
   /* Peak line */
   var c = document.getElementById('peak');
   var ctx = c.getContext('2d');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LIME = '#C8F53C', LINE = '#2A352E';
   var w = 0, h = 0, spread = 1, target = 1;
 
   function size() {
@@ -513,62 +494,47 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
   function gauss(d, s) { return Math.exp(-(d * d) / (2 * s * s)); }
 
   function draw(t) {
-    var css = getComputedStyle(root);
-    var line = css.getPropertyValue('--peak').trim() || '#9AA6FF';
-    var faint = css.getPropertyValue('--peak-faint').trim() || 'rgba(154,166,255,0.2)';
     ctx.clearRect(0, 0, w, h);
-    var base = h - 40, amp = h - 84, mid = w / 2;
-
-    ctx.strokeStyle = faint; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(0, base + 0.5); ctx.lineTo(w, base + 0.5); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(mid + 0.5, 14); ctx.lineTo(mid + 0.5, base + 12); ctx.stroke();
-
-    /* Ticks, mirrored about the axis */
-    var gap = 24, n = Math.ceil(mid / gap);
+    var base = h - 36, amp = h - 74, mid = w / 2;
+    ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, base + .5); ctx.lineTo(w, base + .5); ctx.stroke();
+    var gap = w < 600 ? 20 : 32, n = Math.ceil(mid / gap);
     for (var k = -n; k <= n; k++) {
-      var x = mid + k * gap;
-      var major = k % 5 === 0;
-      ctx.beginPath(); ctx.moveTo(x + 0.5, base); ctx.lineTo(x + 0.5, base + (major ? 12 : 6)); ctx.stroke();
+      var x = mid + k * gap, len = k % 5 === 0 ? 14 : 7;
+      ctx.beginPath(); ctx.moveTo(x + .5, base); ctx.lineTo(x + .5, base + len); ctx.stroke();
     }
-
     var layers = [
-      { s: 0.30, a: 0.38, k: 0.42, wd: 1.25 },
-      { s: 0.20, a: 0.6, k: 0.68, wd: 1.25 },
-      { s: 0.11, a: 1, k: 1, wd: 2.2 }
+      { s: .30, a: .35, k: .40, wd: 1.5 },
+      { s: .20, a: .60, k: .68, wd: 1.5 },
+      { s: .11, a: 1, k: 1, wd: 3 }
     ];
-    ctx.strokeStyle = line;
+    ctx.strokeStyle = LIME;
     for (var i = 0; i < layers.length; i++) {
       var L = layers[i];
-      var br = reduce ? 1 : 1 + 0.045 * Math.sin(t / 1300 + i * 1.3);
+      var br = reduce ? 1 : 1 + .045 * Math.sin(t / 1300 + i * 1.3);
       var sp = L.s * spread;
-      var hh = amp * L.k * br / (0.55 + 0.45 * spread);
+      var hh = amp * L.k * br / (.55 + .45 * spread);
       ctx.beginPath();
-      for (var x2 = 0; x2 <= w; x2 += 2) {
+      for (var x2 = 0; x2 <= w; x2 += 3) {
         var d = Math.abs(x2 - mid) / w;
         var y = base - hh * gauss(d, sp);
         if (x2 === 0) ctx.moveTo(x2, y); else ctx.lineTo(x2, y);
       }
-      ctx.globalAlpha = L.a; ctx.lineWidth = L.wd; ctx.stroke();
+      ctx.globalAlpha = L.a; ctx.lineWidth = L.wd; ctx.lineJoin = 'round'; ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    var top = base - amp * (reduce ? 1 : 1 + 0.045 * Math.sin(t / 1300 + 2.6)) / (0.55 + 0.45 * spread);
-    ctx.fillStyle = line; ctx.fillRect(mid - 4, top - 4, 8, 8);
+    var top = base - amp * (reduce ? 1 : 1 + .045 * Math.sin(t / 1300 + 2.6)) / (.55 + .45 * spread);
+    ctx.fillStyle = LIME; ctx.fillRect(mid - 6, top - 6, 12, 12);
   }
-
-  function frame(t) {
-    spread += (target - spread) * 0.08;
-    draw(t);
-    requestAnimationFrame(frame);
-  }
+  function frame(t) { spread += (target - spread) * .08; draw(t); requestAnimationFrame(frame); }
   function setTarget(clientX) {
     var r = c.getBoundingClientRect();
     var dx = Math.abs(clientX - (r.left + r.width / 2)) / (r.width / 2);
-    target = 0.65 + Math.min(dx, 1) * 1.0;
+    target = .65 + Math.min(dx, 1);
   }
 
   size();
   window.addEventListener('resize', function () { size(); if (reduce) draw(0); });
-  window.__peakRedraw = function () { if (reduce) draw(0); };
   if (reduce) {
     draw(0);
   } else {
@@ -578,3 +544,5 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
   }
 })();
 </script>
+</body>
+</html>
