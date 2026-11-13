@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://muskij.github.io/peak-flow-digitals/sitemap.xml
